@@ -9,4 +9,7 @@ import scrapy
 class ScrapingWebsitesItem(scrapy.Item):
     # define the fields for your item here like:
     links = scrapy.Field()
+    text = scrapy.Field()
+    municipality_name = scrapy.Field()
+    valid = scrapy.Field()
     

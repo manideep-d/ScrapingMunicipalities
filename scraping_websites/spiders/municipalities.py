@@ -42,16 +42,17 @@ class CustomLinkExtractor(LinkExtractor):
 class MunicipalitiesSpider(CrawlSpider):
     name = 'MunicipalitiesSpider'
     #allowed_domains = ['niagarafalls.ca','niagarafalls.civicweb.net']
+    allowed_domains = ['niagarafalls.civicweb.net']
     #allowed_domains =['citywindsor.ca']
-    allowed_domains =['richmondhill.ca']
+    #allowed_domains =['richmondhill.ca']
     #allowed_domains =['vaughan.ca']
     #allowed_domains =['bair.berkeley.edu']
 
-    #start_urls = ['https://niagarafalls.ca/']  
+    start_urls = ['https://niagarafalls.civicweb.net/portal/']  
     #start_urls=['https://citywindsor.ca']
-    start_urls=['https://www.richmondhill.ca/Modules/News/index.aspx?feedId=5988c08a-c0f5-4d51-91e0-9691f68738f4,b178fbf3-ca63-4d70-b2ed-ef140381b794,05eeed24-434e-4a9c-996a-4147a96024ec&keyword=modernize&newsId=174a5617-ce94-4ed7-a851-43eba029c125']
     #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://bair.berkeley.edu/blog/']
+    #start_urls=['https://www.richmondhill.ca']
     word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey"]
 
     rules = (
@@ -59,14 +60,15 @@ class MunicipalitiesSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        links = ScrapingWebsitesItem()
+        items = ScrapingWebsitesItem()
 
         url = response.url
         
-        links['links'] = url
+        items['links'] = url
+        items['municipality_name'] = url.split(".")[1]
+        items['valid'] = False
 
         extension = list(filter(lambda x: response.url.lower().endswith(x), TEXTRACT_EXTENSIONS))
-        print(extension)
 
         if  response.url.lower().endswith('doc') or  response.url.lower().endswith('docx'):
 
@@ -86,9 +88,11 @@ class MunicipalitiesSpider(CrawlSpider):
                     tempfile.close()
 
                     if (self.finding_the_topics(extracted_data) == True):
-                        with open(path,'w') as file:
-                            file.write(extracted_data)
-                            file.close()
+                        #with open(path,'w') as file:
+                            #file.write(extracted_data)
+                            #file.close()
+                        items['text'] = extracted_data
+                        items['valid'] = True
 
                     else:
                             pass
@@ -114,9 +118,11 @@ class MunicipalitiesSpider(CrawlSpider):
                     
                     if (self.finding_the_topics(text) == True):
 
-                        with open(path,'w') as file:
-                            file.write(text)
-                            file.close()
+                        items['text'] = text
+                        items['valid'] = True
+                        #with open(path,'w') as file:
+                            #file.write(text)
+                            #file.close()
                     else:
                             pass
 
@@ -139,9 +145,13 @@ class MunicipalitiesSpider(CrawlSpider):
                         path = '/Users/manideep/Documents/DirectedStudy/new/'+str(title)+now+'.txt'
 
                         if (self.finding_the_topics(text)== True):
-                            with open(path,'w') as file:
-                                file.write(text)
-                                file.close()
+
+                            items['text'] = text
+                            items['valid'] = True
+
+                            #with open(path,'w') as file:
+                                #file.write(text)
+                                #file.close()
                         else:
                             pass
                 except Exception as e: 
@@ -149,14 +159,14 @@ class MunicipalitiesSpider(CrawlSpider):
                         #raise
                         pass
 
-        yield links
+        yield items
 
 
     def finding_the_topics(self,text):
 
         model = self.lda_Model(text)
 
-        words = ["artificial","intelligence","smart","innovation","technology","autonoums","ai","it","informationtechnology","smartcities","intelligent","sensor","smartest","gps","streetlighting","smartparking"]
+        words = ["artificial","intelligence","artificialintelligence","smart","autonoums","ai","it","informationtechnology","smartcities","intelligent","sensor","smartest","gps","streetlighting","smartparking","businessintelligence","dataanalytics"]
 
         for i in range(15):
             wp = model.show_topic(i, topn=20)
@@ -167,7 +177,6 @@ class MunicipalitiesSpider(CrawlSpider):
             for word in topic_keywords:
                 for string in words:
                     if(string == word):
-                        print("True,because following words are matched",string ,"and",word)
                         return True
 
 
@@ -209,7 +218,7 @@ class MunicipalitiesSpider(CrawlSpider):
         corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
         np.random.seed(45)
-        num_topics = 15
+        num_topics = 20
 
         lda_model = models.LdaMulticore(corpus, num_topics=num_topics, \
                                   id2word=dictionary_LDA, \
