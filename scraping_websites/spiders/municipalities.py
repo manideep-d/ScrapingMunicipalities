@@ -8,9 +8,12 @@ from bs4 import BeautifulSoup
 from tempfile import NamedTemporaryFile
 import re
 import textract
+import io
+# For getting information about the pdfs
+from PyPDF2 import PdfFileReader
 #imports for LDA model
 from itertools import chain
-import os
+import requests
 import pandas as pd
 import numpy as np
 from tqdm import tqdm_notebook
@@ -42,17 +45,17 @@ class CustomLinkExtractor(LinkExtractor):
 class MunicipalitiesSpider(CrawlSpider):
     name = 'MunicipalitiesSpider'
     #allowed_domains = ['niagarafalls.ca','niagarafalls.civicweb.net']
-    allowed_domains = ['niagarafalls.civicweb.net']
+    #allowed_domains = ['niagarafalls.civicweb.net']
     #allowed_domains =['citywindsor.ca']
-    #allowed_domains =['richmondhill.ca']
+    allowed_domains =['richmondhill.ca']
     #allowed_domains =['vaughan.ca']
     #allowed_domains =['bair.berkeley.edu']
 
-    start_urls = ['https://niagarafalls.civicweb.net/portal/']  
+    #start_urls = ['https://niagarafalls.civicweb.net/portal/']  
     #start_urls=['https://citywindsor.ca']
     #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://bair.berkeley.edu/blog/']
-    #start_urls=['https://www.richmondhill.ca']
+    start_urls=['https://www.richmondhill.ca']
     word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey"]
 
     rules = (
@@ -63,9 +66,16 @@ class MunicipalitiesSpider(CrawlSpider):
         items = ScrapingWebsitesItem()
 
         url = response.url
+
+        if 'www' in url:
+            items['municipality_name'] = url.split(".")[1]
+
+        else:
+            items['municipality_name'] = url.split("//")[1].split(".")[1]
+
         
         items['links'] = url
-        items['municipality_name'] = url.split(".")[1]
+        
         items['valid'] = False
 
         extension = list(filter(lambda x: response.url.lower().endswith(x), TEXTRACT_EXTENSIONS))
@@ -87,7 +97,7 @@ class MunicipalitiesSpider(CrawlSpider):
                     extracted_data = CONTROL_CHAR_RE.sub('', extracted_data)
                     tempfile.close()
 
-                    if (self.finding_the_topics(extracted_data) == True):
+                    if (self.finding_the_topics(extracted_data,items) == True):
                         #with open(path,'w') as file:
                             #file.write(extracted_data)
                             #file.close()
@@ -109,14 +119,21 @@ class MunicipalitiesSpider(CrawlSpider):
                 path = '/Users/manideep/Documents/DirectedStudy/new/'+str(title)+now+'.txt'
 
                 try:
+                    #with fitz.open(url) as doc:
+                        #text = ''
+                        #for page in doc:
+                            #text += page.getText()
 
-
-                    with fitz.open(url) as doc:
-                        text = ''
-                        for page in doc:
-                            text += page.getText()
+                    response = requests.get(url)
+     
+                    with io.BytesIO(response.content) as f:
+                        pdf = PdfFileReader(f)
+                        information = pdf.getDocumentInfo()
+                        number_of_pages = pdf.getNumPages()
+                
+                    text = f
                     
-                    if (self.finding_the_topics(text) == True):
+                    if (self.finding_the_topics(text,items) == True):
 
                         items['text'] = text
                         items['valid'] = True
@@ -144,7 +161,7 @@ class MunicipalitiesSpider(CrawlSpider):
 
                         path = '/Users/manideep/Documents/DirectedStudy/new/'+str(title)+now+'.txt'
 
-                        if (self.finding_the_topics(text)== True):
+                        if (self.finding_the_topics(text,items)== True):
 
                             items['text'] = text
                             items['valid'] = True
@@ -162,13 +179,13 @@ class MunicipalitiesSpider(CrawlSpider):
         yield items
 
 
-    def finding_the_topics(self,text):
+    def finding_the_topics(self,text,items):
 
         model = self.lda_Model(text)
 
-        words = ["artificial","intelligence","artificialintelligence","smart","autonoums","ai","it","informationtechnology","smartcities","intelligent","sensor","smartest","gps","streetlighting","smartparking","businessintelligence","dataanalytics"]
+        words = ["artificialintelligence","smart","autonoums","ai","informationtechnology","smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning","deeplearning","computervision","nlp"]
 
-        for i in range(15):
+        for i in range(20):
             wp = model.show_topic(i, topn=20)
             topic_keywords = ", ".join([word.replace("_",",") for word, prop in wp])
             topic_keywords = topic_keywords.split(",")
@@ -177,7 +194,9 @@ class MunicipalitiesSpider(CrawlSpider):
             for word in topic_keywords:
                 for string in words:
                     if(string == word):
+                        items['topics'] = topic_keywords
                         return True
+                        
 
 
     def lda_Model(self,text):
@@ -199,8 +218,9 @@ class MunicipalitiesSpider(CrawlSpider):
         ]
         
 
-        stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can']
-        stopwords_other = ['one', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something','browser','contact','us']
+        stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can','and']
+        stopwords_other = ['one', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something','browser','contact','us','telephone','email','phone','home',
+        'sitemap','map','like','tweet','subscribe','alerts','share','things','terms','register','apply']
         my_stopwords = stopwords.words('English') + stopwords_verbs + stopwords_other
 
         #tokens = list(map(lambda sentences: list(chain.from_iterable(sentences),tokens_sentences_lemmatized)))

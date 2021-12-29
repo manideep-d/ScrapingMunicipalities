@@ -12,4 +12,5 @@ class ScrapingWebsitesItem(scrapy.Item):
     text = scrapy.Field()
     municipality_name = scrapy.Field()
     valid = scrapy.Field()
+    topics = scrapy.Field()
     

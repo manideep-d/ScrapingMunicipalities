@@ -15,10 +15,16 @@ class ScrapingWebsitesPipeline:
     def __init__(self):
         self.conn = pymongo.MongoClient('localhost',27017)
         db = self.conn['scarped_documents']
-        self.collection = db['scarped_documents']
+        self.collection = db['with_topics']
+        self.links_seen = set()
 
     def process_item(self, item, spider):
-        if item['valid'] :
-            self.collection.insert(dict(item))
-            #log.msg("Added to MongoDB database!",level=log.DEBUG, spider=spider)
-        return item
+        adapter = ItemAdapter(item)
+        if adapter['links'] in self.links_seen:
+            raise DropItem(f"Duplicate item found: {item!r}")
+        else:
+            self.links_seen.add(item['links'])
+            if item['valid'] :
+
+                self.collection.insert(dict(item))
+                return item
