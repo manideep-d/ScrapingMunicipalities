@@ -20,11 +20,12 @@ class ScrapingWebsitesPipeline:
 
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        if adapter['links'] in self.links_seen:
+        if item['links'] in self.links_seen:
             raise DropItem(f"Duplicate item found: {item!r}")
         else:
+            #https://stackoverflow.com/questions/53006922/dropping-duplicate-items-from-scrapy-pipeline
+            #https://doc.scrapy.org/en/latest/topics/item-pipeline.html#duplicates-filter
             self.links_seen.add(item['links'])
             if item['valid'] :
-
                 self.collection.insert(dict(item))
                 return item

@@ -56,6 +56,7 @@ class MunicipalitiesSpider(CrawlSpider):
     #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://bair.berkeley.edu/blog/']
     start_urls=['https://www.richmondhill.ca']
+    #start_urls =['https://www.richmondhill.ca/Modules/News/index.aspx?feedId=5988c08a-c0f5-4d51-91e0-9691f68738f4,b178fbf3-ca63-4d70-b2ed-ef140381b794,05eeed24-434e-4a9c-996a-4147a96024ec&keyword=modernize&newsId=174a5617-ce94-4ed7-a851-43eba029c125']
     word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey"]
 
     rules = (
@@ -119,19 +120,21 @@ class MunicipalitiesSpider(CrawlSpider):
                 path = '/Users/manideep/Documents/DirectedStudy/new/'+str(title)+now+'.txt'
 
                 try:
-                    #with fitz.open(url) as doc:
-                        #text = ''
-                        #for page in doc:
-                            #text += page.getText()
-
                     response = requests.get(url)
-     
-                    with io.BytesIO(response.content) as f:
-                        pdf = PdfFileReader(f)
-                        information = pdf.getDocumentInfo()
-                        number_of_pages = pdf.getNumPages()
+                    with fitz.open(stream=response.content, filetype="pdf") as doc:
+                        text = ''
+                        for page in doc:
+                            text += page.getText()
+
+                    #response = requests.get(url)
+
+                    #from geeksforgeeks
+                    #with io.BytesIO(response.content) as f:
+                        #pdf = PdfFileReader(f)
+                        #information = pdf.getDocumentInfo()
+                        #number_of_pages = pdf.getNumPages()
                 
-                    text = f
+                    #text = f
                     
                     if (self.finding_the_topics(text,items) == True):
 
@@ -145,8 +148,8 @@ class MunicipalitiesSpider(CrawlSpider):
 
                 except (Exception,RuntimeError) as e: 
                         print(e)
-                        #raise
-                        pass
+                        raise
+                        #pass
 
 
         else:
@@ -173,8 +176,8 @@ class MunicipalitiesSpider(CrawlSpider):
                             pass
                 except Exception as e: 
                         print(e)
-                        #raise
-                        pass
+                        raise
+                        #pass
 
         yield items
 
@@ -183,9 +186,14 @@ class MunicipalitiesSpider(CrawlSpider):
 
         model = self.lda_Model(text)
 
-        words = ["artificialintelligence","smart","autonoums","ai","informationtechnology","smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning","deeplearning","computervision","nlp"]
+        topics= model.show_topics(formatted=True, num_topics=15, num_words=20)
+        topics_strng = ''.join(str(e) for e in topics)
+        items['topics'] = topics_strng
 
-        for i in range(20):
+        words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology","smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning","deeplearning","computervision","nlp"]
+
+       # https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/#10removestopwordsmakebigramsandlemmatize
+        for i in range(15):
             wp = model.show_topic(i, topn=20)
             topic_keywords = ", ".join([word.replace("_",",") for word, prop in wp])
             topic_keywords = topic_keywords.split(",")
@@ -194,7 +202,6 @@ class MunicipalitiesSpider(CrawlSpider):
             for word in topic_keywords:
                 for string in words:
                     if(string == word):
-                        items['topics'] = topic_keywords
                         return True
                         
 
@@ -238,7 +245,7 @@ class MunicipalitiesSpider(CrawlSpider):
         corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
         np.random.seed(45)
-        num_topics = 20
+        num_topics = 15
 
         lda_model = models.LdaMulticore(corpus, num_topics=num_topics, \
                                   id2word=dictionary_LDA, \
