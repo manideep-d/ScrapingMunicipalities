@@ -46,16 +46,16 @@ class MunicipalitiesSpider(CrawlSpider):
     name = 'MunicipalitiesSpider'
     #allowed_domains = ['niagarafalls.ca','niagarafalls.civicweb.net']
     #allowed_domains = ['niagarafalls.civicweb.net']
-    #allowed_domains =['citywindsor.ca']
-    allowed_domains =['richmondhill.ca']
+    allowed_domains =['citywindsor.ca']
+    #allowed_domains =['richmondhill.ca']
     #allowed_domains =['vaughan.ca']
     #allowed_domains =['bair.berkeley.edu']
 
     #start_urls = ['https://niagarafalls.civicweb.net/portal/']  
-    #start_urls=['https://citywindsor.ca']
+    start_urls=['https://citywindsor.ca']
     #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://bair.berkeley.edu/blog/']
-    start_urls=['https://www.richmondhill.ca']
+    #start_urls=['https://www.richmondhill.ca']
     #start_urls =['https://www.richmondhill.ca/Modules/News/index.aspx?feedId=5988c08a-c0f5-4d51-91e0-9691f68738f4,b178fbf3-ca63-4d70-b2ed-ef140381b794,05eeed24-434e-4a9c-996a-4147a96024ec&keyword=modernize&newsId=174a5617-ce94-4ed7-a851-43eba029c125']
     word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey"]
 
@@ -72,7 +72,7 @@ class MunicipalitiesSpider(CrawlSpider):
             items['municipality_name'] = url.split(".")[1]
 
         else:
-            items['municipality_name'] = url.split("//")[1].split(".")[1]
+            items['municipality_name'] = url.split("//")[1].split(".")[0]
 
         
         items['links'] = url
@@ -190,7 +190,11 @@ class MunicipalitiesSpider(CrawlSpider):
         topics_strng = ''.join(str(e) for e in topics)
         items['topics'] = topics_strng
 
-        words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology","smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning","deeplearning","computervision","nlp"]
+        words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology",
+        "smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning",
+        "deeplearning","computervision","nlp","analytics","machine","learning","analytics","technology","rover","computer"]
+
+        score =0
 
        # https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/#10removestopwordsmakebigramsandlemmatize
         for i in range(15):
@@ -202,7 +206,10 @@ class MunicipalitiesSpider(CrawlSpider):
             for word in topic_keywords:
                 for string in words:
                     if(string == word):
-                        return True
+                        score = score + 1
+
+        if score > 1:
+            return True                
                         
 
 
