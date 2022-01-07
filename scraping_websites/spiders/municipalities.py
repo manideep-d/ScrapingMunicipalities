@@ -195,6 +195,7 @@ class MunicipalitiesSpider(CrawlSpider):
         "deeplearning","computervision","nlp","analytics","machine","learning","analytics","technology","rover","computer"]
 
         score =0
+        macthed_words = []
 
        # https://www.machinelearningplus.com/nlp/topic-modeling-gensim-python/#10removestopwordsmakebigramsandlemmatize
         for i in range(15):
@@ -206,9 +207,13 @@ class MunicipalitiesSpider(CrawlSpider):
             for word in topic_keywords:
                 for string in words:
                     if(string == word):
+                        macthed_words.append(word)
                         score = score + 1
 
         if score > 1:
+            items['score'] = score
+            macthedwords = ' '.join(map(str, macthed_words))
+            items['matched_words'] = macthedwords
             return True                
                         
 

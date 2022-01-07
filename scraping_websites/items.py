@@ -13,4 +13,6 @@ class ScrapingWebsitesItem(scrapy.Item):
     municipality_name = scrapy.Field()
     valid = scrapy.Field()
     topics = scrapy.Field()
+    score = scrapy.Field()
+    matched_words = scrapy.Field()
     
