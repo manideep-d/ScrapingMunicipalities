@@ -46,18 +46,18 @@ class MunicipalitiesSpider(CrawlSpider):
     name = 'MunicipalitiesSpider'
     #allowed_domains = ['niagarafalls.ca','niagarafalls.civicweb.net']
     #allowed_domains = ['niagarafalls.civicweb.net']
-    allowed_domains =['citywindsor.ca']
-    #allowed_domains =['richmondhill.ca']
+    #allowed_domains =['richmondhill.ca','citywindsor.ca','niagarafalls.ca','niagarafalls.civicweb.net','vaughan.ca']
+    allowed_domains =['richmondhill.ca']
     #allowed_domains =['vaughan.ca']
     #allowed_domains =['bair.berkeley.edu']
 
     #start_urls = ['https://niagarafalls.civicweb.net/portal/']  
-    start_urls=['https://citywindsor.ca']
+    #start_urls=['https://www.richmondhill.ca','https://citywindsor.ca','https://niagarafalls.ca/','https://niagarafalls.civicweb.net/portal/','https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
     #start_urls = ['https://bair.berkeley.edu/blog/']
-    #start_urls=['https://www.richmondhill.ca']
+    start_urls=['https://www.richmondhill.ca']
     #start_urls =['https://www.richmondhill.ca/Modules/News/index.aspx?feedId=5988c08a-c0f5-4d51-91e0-9691f68738f4,b178fbf3-ca63-4d70-b2ed-ef140381b794,05eeed24-434e-4a9c-996a-4147a96024ec&keyword=modernize&newsId=174a5617-ce94-4ed7-a851-43eba029c125']
-    word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey"]
+    word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey","meetings","archives"]
 
     rules = (
     Rule(CustomLinkExtractor(deny=word_list), callback='parse_item', follow=True),
@@ -192,7 +192,7 @@ class MunicipalitiesSpider(CrawlSpider):
 
         words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology",
         "smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning",
-        "deeplearning","computervision","nlp","analytics","machine","learning","analytics","technology","rover","computer"]
+        "deeplearning","computervision","nlp","analytics","rover","technology"]
 
         score =0
         macthed_words = []
@@ -210,7 +210,7 @@ class MunicipalitiesSpider(CrawlSpider):
                         macthed_words.append(word)
                         score = score + 1
 
-        if score > 1:
+        if score > 2:
             items['score'] = score
             macthedwords = ' '.join(map(str, macthed_words))
             items['matched_words'] = macthedwords
@@ -248,12 +248,12 @@ class MunicipalitiesSpider(CrawlSpider):
 
         #tokens = data['tokens'].tolist()
         bigram_model = Phrases(tokens)
-        trigram_model = Phrases(bigram_model[tokens], min_count=1)
+        trigram_model = Phrases(bigram_model[tokens], min_count=3)
         tokens = list(trigram_model[bigram_model[tokens]])                                        
 
         dictionary_LDA = corpora.Dictionary(tokens)
 
-        #dictionary_LDA.filter_extremes(no_below=3)
+        dictionary_LDA.filter_extremes(no_below=3)
         corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
         np.random.seed(45)
