@@ -51,7 +51,6 @@ class MunicipalitiesSpider(CrawlSpider):
     #allowed_domains =['richmondhill.ca','citywindsor.ca','niagarafalls.ca','niagarafalls.civicweb.net','vaughan.ca']
     #allowed_domains =['richmondhill.ca']
     #allowed_domains =['vaughan.ca']
-    #allowed_domains =['bair.berkeley.edu']
     #allowed_domains = ['citywindsor.ca']
     allowed_domains = ['winnipeg.ca']
 
@@ -197,7 +196,7 @@ class MunicipalitiesSpider(CrawlSpider):
 
         words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology",
         "smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning",
-        "deeplearning","computervision","nlp","analytics","rover","technology"]
+        "deeplearning","computervision","nlp","analytics","rover","technology","autonomous","drones","smarthome"]
 
         score =0
         macthed_words = []
