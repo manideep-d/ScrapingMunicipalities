@@ -46,23 +46,13 @@ class CustomLinkExtractor(LinkExtractor):
 
 class MunicipalitiesSpider(CrawlSpider):
     name = 'MunicipalitiesSpider'
-    #allowed_domains = ['niagarafalls.ca']
-    #allowed_domains = ['niagarafalls.civicweb.net']
-    #allowed_domains =['richmondhill.ca','citywindsor.ca','niagarafalls.ca','niagarafalls.civicweb.net','vaughan.ca']
-    #allowed_domains =['richmondhill.ca']
-    #allowed_domains =['vaughan.ca']
-    #allowed_domains = ['citywindsor.ca']
-    allowed_domains = ['winnipeg.ca']
+   
+    allowed_domains =['richmondhill.ca','citywindsor.ca','niagarafalls.ca','niagarafalls.civicweb.net','vaughan.ca','winnipeg.ca','mississauga.ca']
+   
 
-    #start_urls = ['https://niagarafalls.civicweb.net/portal/']  
-    #start_urls=['https://www.richmondhill.ca','https://citywindsor.ca','https://niagarafalls.ca/','https://niagarafalls.civicweb.net/portal/','https://www.vaughan.ca/Pages/Home.aspx']
-    #start_urls = ['https://www.vaughan.ca/Pages/Home.aspx']
-    #start_urls = ['https://bair.berkeley.edu/blog/']
-    #start_urls=['https://www.richmondhill.ca']
-    #start_urls =['https://niagarafalls.ca/']
-    #start_urls = ['https://www.citywindsor.ca/Pages/Home.aspx']
-    start_urls = ['https://www.winnipeg.ca/interhom/']
-    #start_urls =['https://www.richmondhill.ca/Modules/News/index.aspx?feedId=5988c08a-c0f5-4d51-91e0-9691f68738f4,b178fbf3-ca63-4d70-b2ed-ef140381b794,05eeed24-434e-4a9c-996a-4147a96024ec&keyword=modernize&newsId=174a5617-ce94-4ed7-a851-43eba029c125']
+    start_urls=['https://www.richmondhill.ca','https://citywindsor.ca','https://niagarafalls.ca/','https://niagarafalls.civicweb.net/portal/','https://www.vaughan.ca/Pages/Home.aspx','https://www.winnipeg.ca/interhom/'
+    ,"https://www.mississauga.ca/"]
+   
     word_list=["img","facebook","twitter","youtube","instagram","maps","map","zoom","webex","linkedin","you","story","calendar","cem","google","form","survey","meetings","archives"]
 
     rules = (
