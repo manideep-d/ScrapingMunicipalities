@@ -64,6 +64,7 @@ google-resumable-media @ file:///tmp/build/80754af9/google-resumable-media_16243
 greenlet==1.1.2
 grpcio @ file:///opt/concourse/worker/volumes/live/b549791f-b47d-49ca-7293-5d53b55def5a/volume/grpcio_1614884176451/work
 hdbscan==0.8.27
+herokuify-scrapyd==1.0
 huggingface-hub @ file:///tmp/build/80754af9/huggingface_hub_1633077517439/work
 hyperlink @ file:///tmp/build/80754af9/hyperlink_1610130746837/work
 idna @ file:///tmp/build/80754af9/idna_1622654382723/work
@@ -185,6 +186,8 @@ scikit-learn @ file:///opt/concourse/worker/volumes/live/27ad05e5-2546-4218-4550
 scipy @ file:///opt/concourse/worker/volumes/live/8f68d291-1564-4c63-4bf1-6b1f103a9a36/volume/scipy_1630606804849/work
 Scrapy @ file:///opt/concourse/worker/volumes/live/18494ba8-4a5e-4f84-7bdd-470355d67a7a/volume/scrapy_1606864732519/work
 scrapy-proxy-pool==0.1.9
+scrapyd==1.3.0
+scrapyd-client @ git+https://github.com/scrapy/scrapyd-client.git@c7b00fe8a05003e426cb1891a49fe266ffba03dd
 seaborn @ file:///tmp/build/80754af9/seaborn_1629307859561/work
 selenium @ file:///opt/concourse/worker/volumes/live/f54cbba5-7632-4bae-5fbd-3ec06aa93a51/volume/selenium_1594416153038/work
 Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
@@ -222,6 +225,7 @@ typer==0.4.0
 typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1631814937681/work
 tzdata @ file:///home/conda/feedstock_root/build_artifacts/python-tzdata_1635187324762/work
 tzlocal @ file:///Users/runner/miniforge3/conda-bld/tzlocal_1635525057167/work
+uberegg==0.1.1
 ultimate-sitemap-parser==0.5
 umap-learn==0.5.2
 urllib3==1.26.7

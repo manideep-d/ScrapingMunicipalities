@@ -8,19 +8,31 @@
 from itemadapter import ItemAdapter
 import pymongo
 from scrapy.exceptions import DropItem
-#from scrapy import log
+
+import os
 
 class ScrapingWebsitesPipeline:
 
     def __init__(self):
-        self.conn = pymongo.MongoClient('localhost',27017)
-        db = self.conn['scarped_documents']
-        self.collection = db['with_topics']
+        """ Initializing the db proeprties """
+
+        HOST_NAME = os.environ['HOST_NAME']
+        PORT = os.environ['PORT']
+        DATABASE_NAME = os.environ['DATABASE_NAME']
+        COLLECTION_NAME = os.environ['COLLECTION_NAME']
+
+        self.conn = pymongo.MongoClient(HOST_NAME,PORT)
+        db = self.conn[DATABASE_NAME]
+        self.collection = db[COLLECTION_NAME]
+
         self.links_retrieved = set()
 
     def process_item(self, item, spider):
+        """ Processing each item and saving it to the db and it won't add duplicate link to database """
+
         adapter = ItemAdapter(item)
-        if item['links'] in self.links_retrieved:
+
+        if adapter['links'] in self.links_retrieved:
             raise DropItem(f"Duplicate item found: {item!r}")
         else:
             #https://stackoverflow.com/questions/53006922/dropping-duplicate-items-from-scrapy-pipeline
