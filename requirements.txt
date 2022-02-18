@@ -1,4 +1,4 @@
-beautifulsoup4==4.10.0
+beautifulsoup4
 fitz==0.0.1.dev2
 gensim==4.1.2
 itemadapter==0.3.0
