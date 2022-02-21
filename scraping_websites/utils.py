@@ -7,9 +7,10 @@ import textract
 #imports for LDA model
 from itertools import chain
 import requests
-import numpy as np
-from tqdm import tqdm_notebook
-tqdm_notebook().pandas()
+
+import nltk
+nltk.download('omw-1.4')
+
 from nltk.tokenize import sent_tokenize
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag

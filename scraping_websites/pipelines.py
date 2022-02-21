@@ -15,7 +15,7 @@ class ScrapingWebsitesPipeline:
 
     def __init__(self):
         """ Initializing the db proeprties """
-
+        
         HOST_NAME = os.environ['HOST_NAME']
         PORT = os.environ['PORT']
         DATABASE_NAME = os.environ['DATABASE_NAME']
