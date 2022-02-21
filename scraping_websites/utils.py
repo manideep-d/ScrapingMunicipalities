@@ -159,7 +159,7 @@ def lda_Model(text):
     stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can','and']
     stopwords_other = ['one', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something','browser','contact','us','telephone','email','phone','home',
     'sitemap','map','like','tweet','subscribe','alerts','share','things','terms','register','apply']
-    my_stopwords = stopwords.words('English') + stopwords_verbs + stopwords_other
+    my_stopwords = stopwords.words('english') + stopwords_verbs + stopwords_other
 
     tokens = list(map(lambda tokens: [token.lower() for token in tokens if token.isalpha() 
                                                 and token.lower() not in my_stopwords and len(token)>=1],tokens_sentences_lemmatized))
