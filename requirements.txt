@@ -1,11 +1,11 @@
-beautifulsoup4
+beautifulsoup4==4.10.0
 fitz==0.0.1.dev2
 gensim==4.1.2
 itemadapter==0.3.0
 nltk==3.6.5
 numpy==1.20.3
 pymongo==3.12.0
-PyMuPDF==1.19.1
+PyMuPDF==1.19.0
 requests==2.26.0
 Scrapy==2.4.1
 textract==1.6.4
@@ -14,4 +14,3 @@ tqdm==4.62.2
 scrapyd==1.3.0
 scrapyd-client @ git+https://github.com/scrapy/scrapyd-client.git@c7b00fe8a05003e426cb1891a49fe266ffba03dd
 herokuify-scrapyd==1.0
-PyMuPDF==1.19.1
