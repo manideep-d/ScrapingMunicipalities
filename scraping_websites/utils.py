@@ -155,7 +155,6 @@ def lda_Model(text):
     for tokens_POS in POS_tokens
     ]
     
-
     stopwords_verbs = ['say', 'get', 'go', 'know', 'may', 'need', 'like', 'make', 'see', 'want', 'come', 'take', 'use', 'would', 'can','and']
     stopwords_other = ['one', 'image', 'getty', 'de', 'en', 'caption', 'also', 'copyright', 'something','browser','contact','us','telephone','email','phone','home',
     'sitemap','map','like','tweet','subscribe','alerts','share','things','terms','register','apply']
