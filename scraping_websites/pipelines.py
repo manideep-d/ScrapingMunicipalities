@@ -21,7 +21,7 @@ class ScrapingWebsitesPipeline:
         DATABASE_NAME = os.environ['DATABASE_NAME']
         COLLECTION_NAME = os.environ['COLLECTION_NAME']
 
-        self.conn = pymongo.MongoClient(HOST_NAME,PORT)
+        self.conn = pymongo.MongoClient(HOST_NAME,int(PORT))
         db = self.conn[DATABASE_NAME]
         self.collection = db[COLLECTION_NAME]
 
