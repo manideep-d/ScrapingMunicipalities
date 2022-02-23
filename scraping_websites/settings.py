@@ -66,8 +66,6 @@ ITEM_PIPELINES = {
     'scraping_websites.pipelines.ScrapingWebsitesPipeline': 300,
 }
 
-LOG_ENCODING = False
-
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

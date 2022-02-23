@@ -14,7 +14,7 @@ if __name__ == "__main__":
     subprocess.run("scrapyd-deploy", shell=True, universal_newlines=True)
     scheduler = TwistedScheduler(timezone=pytz.timezone('US/Eastern'))
     # cron trigger that schedules jobxs
-    scheduler.add_job(send_request, 'cron', year=2022, month=2, day=22, hour=18)
+    scheduler.add_job(send_request, 'cron', year=2022, month=2, day=23, hour=19)
     # start the scheduler
     scheduler.start()
     reactor.run()

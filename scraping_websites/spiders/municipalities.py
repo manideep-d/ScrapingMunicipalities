@@ -7,6 +7,10 @@ from ..utils import parsing_doc_ext_as_doc_or_docx,parsing_doc_ext_as_pdf,parsin
 #to get domain name
 import tldextract
 
+import logging
+
+logger = logging.getLogger(__name__).setLevel(logging.ERROR)
+
 
 TEXTRACT_EXTENSIONS = [".doc", ".docx",".pdf"]
 
