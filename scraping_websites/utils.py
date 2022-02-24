@@ -109,7 +109,7 @@ def finding_the_topics(text,items):
     topics_strng = ''.join(str(e) for e in topics)
     items['topics'] = topics_strng
 
-    words = ["artificialintelligence","artificial","intelligence","smart","autonoums","ai","informationtechnology",
+    words = ["artificialintelligence","intelligence","smart","autonoums","ai","informationtechnology",
     "smartcities","intelligent","sensors","smartest","gps","smartparking","businessintelligence","dataanalytics","machinelearning",
     "deeplearning","computervision","nlp","analytics","rover","technology","autonomous","drones","smarthome"]
 
