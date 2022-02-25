@@ -164,7 +164,7 @@ def lda_Model(text):
                                                 and token.lower() not in my_stopwords and len(token)>=1],tokens_sentences_lemmatized))
 
     bigram_model = Phrases(tokens)
-    tokens = list([bigram_model[tokens]])                                        
+    tokens = list(bigram_model[tokens])                                        
 
     dictionary_LDA = corpora.Dictionary(tokens)
 

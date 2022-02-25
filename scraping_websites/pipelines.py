@@ -23,7 +23,7 @@ class ScrapingWebsitesPipeline:
 
         self.conn = pymongo.MongoClient(HOST_NAME,int(PORT))
         db = self.conn[DATABASE_NAME]
-        self.collection = db[COLLECTION_NAME]
+        self.collection = db[COLLECTION_NAME] 
 
         self.links_retrieved = set()
 
