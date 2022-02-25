@@ -26,7 +26,7 @@ class MunicipalitiesSpider(CrawlSpider):
 
     name = 'MunicipalitiesSpider'
    
-    allowed_domains =['richmondhill.ca','niagarafalls.ca','niagarafalls.civicweb.net','vaughan.ca','winnipeg.ca','mississauga.ca']
+    allowed_domains =['richmondhill.ca','niagarafalls.ca','niagarafalls.civicweb.net','winnipeg.ca','mississauga.ca']
    
 
     start_urls=['https://www.richmondhill.ca','https://niagarafalls.ca/','https://niagarafalls.civicweb.net/portal/',

@@ -164,12 +164,10 @@ def lda_Model(text):
                                                 and token.lower() not in my_stopwords and len(token)>=1],tokens_sentences_lemmatized))
 
     bigram_model = Phrases(tokens)
-    trigram_model = Phrases(bigram_model[tokens], min_count=3)
-    tokens = list(trigram_model[bigram_model[tokens]])                                        
+    tokens = list([bigram_model[tokens]])                                        
 
     dictionary_LDA = corpora.Dictionary(tokens)
 
-    dictionary_LDA.filter_extremes(no_below=3)
     corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
     lda_model = models.LdaModel(corpus, num_topics=num_topics, \
