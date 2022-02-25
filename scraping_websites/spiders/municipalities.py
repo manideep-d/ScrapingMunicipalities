@@ -9,9 +9,6 @@ import tldextract
 
 import logging
 
-logger = logging.getLogger(__name__).setLevel(logging.ERROR)
-
-
 TEXTRACT_EXTENSIONS = [".doc", ".docx",".pdf"]
 
 class CustomLinkExtractor(LinkExtractor):
@@ -24,6 +21,8 @@ class CustomLinkExtractor(LinkExtractor):
 
 class MunicipalitiesSpider(CrawlSpider):
     """ Spider which crawls the websites of municipalities """
+
+    logger = logging.getLogger(__name__).setLevel(logging.ERROR)
 
     name = 'MunicipalitiesSpider'
    
