@@ -170,11 +170,13 @@ def lda_Model(text):
 
     corpus = [dictionary_LDA.doc2bow(tok) for tok in tokens]
 
-    #loading lda model
-    lda_model = models.LdaModel.load("lda.model")
-    vector = lda_model[corpus] 
-
-    return vector
+    lda_model = models.LdaModel(corpus, num_topics=num_topics, \
+                                id2word=dictionary_LDA, \
+                                passes=10, alpha= 'auto',chunksize=100,
+                                random_state=80, \
+                                eta=[0.01]*len(dictionary_LDA.keys()))
+        
+    return lda_model
 
     
 
