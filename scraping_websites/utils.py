@@ -172,8 +172,9 @@ def lda_Model(text):
 
     #loading lda model
     lda_model = models.LdaModel.load("lda.model")
-        
-    return lda_model
+    vector = lda_model[corpus] 
+
+    return vector
 
     
 
